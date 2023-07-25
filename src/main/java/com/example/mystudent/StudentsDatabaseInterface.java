@@ -1,4 +1,4 @@
-package com.example.myshapeagglomerated;
+package com.example.mystudent;
 
 // Interface StudentsDatabaseInterface
 interface StudentsDatabaseInterface {

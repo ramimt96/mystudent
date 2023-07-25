@@ -1,4 +1,4 @@
-package com.example.myshapeagglomerated;
+package com.example.mystudent;
 
 import java.sql.DriverManager;
 import java.sql.Connection;

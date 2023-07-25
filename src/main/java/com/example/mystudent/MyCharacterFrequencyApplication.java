@@ -1,4 +1,4 @@
-package com.example.mycharacterfrequency;
+package com.example.mystudent;
 
 import javafx.application.Application;
 import javafx.application.Platform;
