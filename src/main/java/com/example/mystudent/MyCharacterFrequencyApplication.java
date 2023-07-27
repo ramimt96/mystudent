@@ -20,6 +20,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.*;
 
 public class MyCharacterFrequencyApplication extends Application {
@@ -29,13 +30,13 @@ public class MyCharacterFrequencyApplication extends Application {
     double startAngle;
     double scale;
 
-    String Title, filename;
+    String Title, filename, URL;
     Scanner input;
 
     //Inputs to dialog boxes
     Boolean isPiechart;
     List<String> piechartInputs = new ArrayList();
-
+    List<String> sqlInputs = new ArrayList<>();
 
     public VBox addLeftVBox(double widthLeftCanvas, double heightCanvas, TilePane TP, MyColor color){
         VBox VB = new VBox();
@@ -64,7 +65,7 @@ public class MyCharacterFrequencyApplication extends Application {
 
         String[] nameImages = new String[] {"Circle", "Rectangle", "Intersection", "Pie"};
         String pathFile = "C:\\Users\\rtara\\OneDrive\\Documents\\CCNY\\2023 Summer Term\\CSC 221 Software Design\\" +
-                "Assignment 3 - mycharacterfrequency\\mycharacterfrequency\\Shapes\\";
+                "Assignment 4 - mystudent\\mystudent\\Shapes\\";
 
         Deque<MyShape> stackMyShapes = new ArrayDeque<>();
         for (String nameImage : nameImages) {
@@ -89,9 +90,11 @@ public class MyCharacterFrequencyApplication extends Application {
                         dialogIntersection(widthCenterCanvas, heightCenterCanvas, BP, CP, TP, stackMyShapes);
                         break;
 
-                    case "Pie":
-                        dialogPiechart(widthCenterCanvas, heightCenterCanvas, widthRightCanvas, BP);
+                    case "Book":
+                        dialogBookAnalysis(widthCenterCanvas, heightCenterCanvas, widthRightCanvas, BP);
                         break;
+                    case "SQL":
+                        dialogSQL(widthCenterCanvas, heightCenterCanvas, widthRightCanvas, BP);
                 }
             });
             HB.getChildren().add(geometricImage);
@@ -358,7 +361,231 @@ public class MyCharacterFrequencyApplication extends Application {
         });
     }
 
-    public void dialogPiechart(double widthCenterCanvas, double heightCenterCanvas, double widthRightCanvas, BorderPane BP) {
+    public void dialogBookAnalysis(double widthCenterCanvas, double heightCenterCanvas, double widthRightCanvas, BorderPane BP){
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Book Analytics");
+        dialog.setHeaderText(null);
+
+        // Set the button types
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        // Create the dialog's grid
+        GridPane gridDialog = new GridPane();
+        gridDialog.setHgap(10);
+        gridDialog.setVgap(10);
+        gridDialog.setPadding(new Insets(20, 150, 10, 10));
+
+        ComboBox<String> title = new ComboBox();
+        title.getItems().addAll("Alice in Wonderland", "A Tale of Two Cities", "David Copperfield",
+                "Emma", "Moby Dick", "Oliver Twist", "Pride and Prejudice", "War and Peace", "xWords");
+
+        gridDialog.add(new Label("Title"), 0, 0);
+        gridDialog.add(title, 1, 0);
+
+        dialog.getDialogPane().setContent(gridDialog);
+
+        // Request focus on numberEvents field by default.
+        Platform.runLater(() -> title.requestFocus());
+
+        // Convert the result to a list when the login button is clicked
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == ButtonType.OK){
+                this.Title =  title.getValue(); return Title;
+            }
+            return null;
+        });
+
+        Optional<String> Result = dialog.showAndWait();
+
+        Result.ifPresent(event -> {
+            this.filename = "C:\\Users\\rtara\\OneDrive\\Documents\\CCNY\\2023 Summer Term\\CSC 221 Software Design" +
+                    "\\Assignment 4 - mystudent\\mystudent\\Texts\\" + Title + ".txt";
+            this.Title = "Book Title: " + this.Title;
+
+            // Open, read, and close file
+            openFile();
+            String w = readFile();
+            closeFile();
+
+            HistogramAlphaBet H = new HistogramAlphaBet(w);
+
+            System.out.println(H);
+
+            // Custom dialog for chart selection
+            try{
+                dialogPiechart(widthCenterCanvas, heightCenterCanvas, widthRightCanvas, H, BP);
+            }
+            catch(FileNotFoundException e) { throw new RuntimeException(e); }
+        });
+    }
+
+    public void dialogSQL(double widthCenterCanvas, double heightCenterCanvas, double widthRightCanvas, BorderPane BP) {
+        Dialog<List<String>> dialog = new Dialog<>();
+        dialog.setTitle("SQL");
+        dialog.setHeaderText(null);
+
+        ToggleGroup groupSQL = new ToggleGroup();
+
+        RadioButton radioMSSQL = new RadioButton("MS SQL");
+        radioMSSQL.setToggleGroup(groupSQL);
+
+        RadioButton radioMySQL = new RadioButton("MySQL");
+        radioMySQL.setToggleGroup(groupSQL);
+
+        RadioButton radioPostgreSQL = new RadioButton("Postgre SQL");
+        radioPostgreSQL.setToggleGroup(groupSQL);
+
+        TextField userName = new TextField();
+        TextField passWord = new TextField();
+        ComboBox<String> schema = new ComboBox<>();
+        schema.getItems().addAll("Students",
+                "New York CityBike",
+                "Family Relations");
+
+        // Set the button types
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        // Create the dialog's grid
+        GridPane gridDialog = new GridPane();
+        gridDialog.setHgap(10);
+        gridDialog.setVgap(10);
+        gridDialog.setPadding(new Insets(20, 150, 10, 10));
+
+        gridDialog.add(new Label("DBMS"), 0, 1);
+        gridDialog.add(radioMSSQL, 1, 1);
+        gridDialog.add(radioMySQL, 2, 1);
+        gridDialog.add(radioPostgreSQL, 4, 1);
+        gridDialog.add(new Label("Schema"), 0, 2);
+        gridDialog.add(schema, 1, 2);
+
+        gridDialog.add(new Label("Username"), 0, 4);
+        gridDialog.add(userName, 1, 4);
+        gridDialog.add(new Label("Password"), 0, 5);
+        gridDialog.add(passWord, 1, 5);
+
+        dialog.getDialogPane().setContent(gridDialog);
+
+        // Request focus on radioMySQL button by default
+        Platform.runLater(() -> radioMySQL.requestFocus());
+
+        // Convert the result to a list when the login button is clicked
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == ButtonType.OK){
+                String DBMS = ((RadioButton) groupSQL.getSelectedToggle()).getText();
+                switch (DBMS){
+                    case "MySQL":
+                        URL = "jdbc:mysql://localhost:3306/Students?allowLoadLocalInfile=true";
+                        break;
+
+                    case "MS SQL":
+                        URL = "jdbc:sqlserver://localhost\\SQLEXPRESS:52188";
+                        break;
+
+                    case "Postgre SQL":
+                        URL = "jdbc:postgresql://localhost:5432/postgres";
+                }
+                System.out.println(URL);
+
+                sqlInputs.add(URL); sqlInputs.add(userName.getText()); sqlInputs.add(passWord.getText()); sqlInputs.add(schema.getValue());
+                return sqlInputs;
+            }
+            return null;
+        });
+
+        Optional<List<String>> Result = dialog.showAndWait();
+
+        Result.ifPresent(event -> {
+            // Create StudentsDatabase and Connection objects
+            String url =  sqlInputs.get(0);
+            String username = sqlInputs.get(1);
+            String password = sqlInputs.get(2);
+
+            System.out.println(url + " " + username + " " + password);
+
+            String Schema = sqlInputs.get(3);
+            this.Title = "Database: " + Schema;
+
+            switch (Schema){
+                case "Students":
+                    filename = "\"C:\\Users\\rtara\\OneDrive\\Documents\\CCNY\\2023 Summer Term\\" +
+                            "CSC 221 Software Design\\Assignment 4 - mystudent\\mystudent\\Texts\\Schedule.txt\"";
+                    HistogramAlphaBet H = MySQLStudentsDatabase(url, username, password, filename);
+
+                    // Custom dialog for chart selection
+                    try{
+                        dialogPiechart(widthCenterCanvas, heightCenterCanvas, widthRightCanvas, H, BP);
+                    }
+                    catch(FileNotFoundException e) { throw new RuntimeException(e); }
+                    break;
+
+                case "NY CityBke":
+                    break;
+
+                case "Family Relations":
+            }
+        });
+    }
+
+    public HistogramAlphaBet MySQLStudentsDatabase(String url, String username, String password, String filename){
+
+        // Create a StudentDatabase object
+        StudentsDatabase DB = new StudentsDatabase(url, username, password);
+
+        // Create-populate Table Schedule
+        String nameTable;
+        nameTable = StudentsDatabaseInterface.SCHEMA + ".Schedule";
+        try{
+            StudentsDatabase.Schedule schedule = DB.new Schedule(filename, nameTable);
+        }
+        catch(SQLException e) { throw new RuntimeException(e); }
+
+        // Create-populate Table Courses
+        String nameToTable = StudentsDatabaseInterface.SCHEMA + ".Courses";
+        String nameFromTable = StudentsDatabaseInterface.SCHEMA + ".Schedule";
+        try{
+            StudentsDatabase.Courses courses = DB.new Courses(nameToTable, nameFromTable);
+        }
+        catch(SQLException e) { throw new RuntimeException(e); }
+
+        // Create-populate Table Students
+        nameTable = StudentsDatabaseInterface.SCHEMA + ".Students";
+        try{
+            StudentsDatabase.Students students = DB.new Students(nameTable);
+        }
+        catch(SQLException e) { throw new RuntimeException(e); }
+
+        // Create-populate Table Classes
+        nameTable = StudentsDatabaseInterface.SCHEMA + ".Classes";
+        try{
+            StudentsDatabase.Classes classes = DB.new Classes(nameTable);
+        }
+        catch(SQLException e) { throw new RuntimeException(e); }
+
+        // Create-populate Table AggregateGrades
+        nameToTable = StudentsDatabaseInterface.SCHEMA + ".AggregateGrades";
+        nameFromTable = StudentsDatabaseInterface.SCHEMA + ".Classes";
+        StudentsDatabase.AggregateGrades aggregateGrades;
+        try{
+            aggregateGrades = DB.new AggregateGrades(nameToTable, nameFromTable);
+        }
+        catch(SQLException e) { throw new RuntimeException(e); }
+
+        Map<Character, Integer> AG =  aggregateGrades.getAggregateGrades(nameToTable);
+        System.out.println("\nAggregate Grades: " + AG);
+
+        // Create-return a histogram
+        return new HistogramAlphaBet(AG);
+
+        /*
+        // Alternatively apply the constructor using the ResultSet object
+        ResultSet RS = aggregateGrades.getAggregateGrades(connection, nameToTable);
+        return new HistogramAlphaBet(RS);
+        */
+    }
+
+
+    public void dialogPiechart(double widthCenterCanvas, double heightCenterCanvas, double widthRightCanvas,
+                               HistogramAlphaBet H, BorderPane BP) {
         Dialog<List<String>> dialog = new Dialog<>();
         dialog.setTitle("Pie Chart");
         dialog.setHeaderText(null);
@@ -374,22 +601,15 @@ public class MyCharacterFrequencyApplication extends Application {
         TextField totalNumberEvents = new TextField();
         TextField startingAngle = new TextField();
 
-        ComboBox title = new ComboBox();
-        title.getItems().addAll("Alice in Wonderland", "A Tale of Two Cities", "David Copperfield",
-                "Emma", "Moby Dick", "Oliver Twist", "Pride and Prejudice", "War and Peace", "xWords");
-
         gridDialog.add(new Label("Display"), 0, 0);
         gridDialog.add(numberEvents, 1, 0);
         gridDialog.add(new Label("Number of character slices to display"), 2, 0);
         gridDialog.add(new Label("Total"), 0, 1);
         gridDialog.add(totalNumberEvents, 1, 1);
-        gridDialog.add(new Label("Max number of characters [26]"), 2, 1);
+        gridDialog.add(new Label("Max number of characters"), 2, 1);
         gridDialog.add(new Label("Starting Angle"), 0, 2);
         gridDialog.add(startingAngle, 1, 2);
         gridDialog.add(new Label("Starting angle of first slice [in degrees]"), 2, 2);
-        gridDialog.add(new Label("Title"), 0, 3);
-        gridDialog.add(title, 1, 3);
-        gridDialog.add(new Label("Title of book"), 2, 3);
 
         dialog.getDialogPane().setContent(gridDialog);
 
@@ -402,8 +622,6 @@ public class MyCharacterFrequencyApplication extends Application {
                 piechartInputs.add(numberEvents.getText());
                 piechartInputs.add(totalNumberEvents.getText());
                 piechartInputs.add(startingAngle.getText());
-                piechartInputs.add(title.getValue().toString());
-
                 return piechartInputs;
             }
             return null;
@@ -415,16 +633,6 @@ public class MyCharacterFrequencyApplication extends Application {
             this.N = Integer.parseInt(piechartInputs.get(0));
             this.M = Integer.parseInt(piechartInputs.get(1));
             this.startAngle = Double.parseDouble(piechartInputs.get(2));
-            this.Title = piechartInputs.get(3);
-            this.filename = "C:\\Users\\rtara\\OneDrive\\Documents\\CCNY\\2023 Summer Term\\CSC 221 Software Design" +
-                    "\\Assignment 3 - mycharacterfrequency\\mycharacterfrequency\\Texts\\" + Title + ".txt";
-
-            //open, read, close file
-            openFile();
-            String w = readFile();
-            closeFile();
-
-            HistogramAlphaBet H = new HistogramAlphaBet(w);
 
             Canvas CV = addCanvasPieChart(widthCenterCanvas, heightCenterCanvas, H);
             BP.setAlignment(CV, Pos. TOP_CENTER); BP.setCenter(CV);

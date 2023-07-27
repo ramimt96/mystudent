@@ -19,6 +19,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.*;
 
 public class MyShapeAgglomerated extends Application{
@@ -65,8 +66,8 @@ public class MyShapeAgglomerated extends Application{
     }
 
     // Set up the top region of the BorderPane
-    public HBox addTopHBox(double widthTopCanvas, double heightTopCanvas, double widthCenterCanvas,
-                           double heightCenterCanvas, double widthRightCanvas, BorderPane BP, MyColorPalette CP, TilePane TP) throws FileNotFoundException {
+    public HBox addTopHBox(double widthTopCanvas, double heightTopCanvas, double widthCenterCanvas, double heightCenterCanvas,
+                           double widthRightCanvas, BorderPane BP, MyColorPalette CP, TilePane TP) throws FileNotFoundException {
 
         // Create a HBox node
         HBox HB = new HBox();
@@ -121,8 +122,8 @@ public class MyShapeAgglomerated extends Application{
                         dialogBookAnalytics(widthCenterCanvas, heightCenterCanvas, widthRightCanvas, BP);
                         break;
 
-                    /*case "SQL":         // Database
-                        dialogSQL(widthCenterCanvas, heightCenterCanvas, widthRightCanvas, BP);*/
+                    case "SQL":         // Database
+                        dialogSQL(widthCenterCanvas, heightCenterCanvas, widthRightCanvas, BP);
                 }
             });
 
@@ -818,7 +819,7 @@ public class MyShapeAgglomerated extends Application{
         });
     }
 
-    /*public void dialogSQL(double widthCenterCanvas, double heightCenterCanvas, double widthRightCanvas, BorderPane BP){
+    public void dialogSQL(double widthCenterCanvas, double heightCenterCanvas, double widthRightCanvas, BorderPane BP){
 
         Dialog<List<String>> dialog = new Dialog<>();
         dialog.setTitle("SQL");
@@ -975,14 +976,15 @@ public class MyShapeAgglomerated extends Application{
         // Create-return a histogram
         return new HistogramAlphaBet(AG);
 
-        *//*
+        /*
         // Alternatively apply the constructor using the ResultSet object
         ResultSet RS = aggregateGrades.getAggregateGrades(connection, nameToTable);
         return new HistogramAlphaBet(RS);
-        *//*
-    }*/
+        */
+    }
 
-    public void toggleGroupChart(double widthCenterCanvas, double heightCenterCanvas, double widthRightCanvas, HistogramAlphaBet H, BorderPane BP) throws FileNotFoundException {
+    public void toggleGroupChart(double widthCenterCanvas, double heightCenterCanvas, double widthRightCanvas,
+                                 HistogramAlphaBet H, BorderPane BP) throws FileNotFoundException {
 
         ToggleGroup groupChart = new ToggleGroup();
 
@@ -1124,7 +1126,8 @@ public class MyShapeAgglomerated extends Application{
         // Convert the result to a list when the login button is clicked
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == ButtonType.OK){
-                piechartInputs.add(numberEvents.getText()); piechartInputs.add(totalNumberEvents.getText());
+                piechartInputs.add(numberEvents.getText());
+                piechartInputs.add(totalNumberEvents.getText());
                 piechartInputs.add(startingAngle.getText());
                 return piechartInputs;
             }
