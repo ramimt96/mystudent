@@ -62,8 +62,9 @@ public class MyCharacterFrequencyApplication extends Application {
         HBox HB = new HBox();
         HB.setPrefWidth(widthTopCanvas);
         HB.setPadding(new Insets(5, 5, 5, 5));
+        HB.setSpacing(10);
 
-        String[] nameImages = new String[] {"Circle", "Rectangle", "Intersection", "Pie"};
+        String[] nameImages = new String[] {"Circle", "Rectangle", "Intersection", "Book", "SQL"};
         String pathFile = "C:\\Users\\rtara\\OneDrive\\Documents\\CCNY\\2023 Summer Term\\CSC 221 Software Design" +
                 "\\Assignment 4 - mystudent\\mystudent\\Shapes\\";
 
@@ -90,7 +91,7 @@ public class MyCharacterFrequencyApplication extends Application {
                         dialogIntersection(widthCenterCanvas, heightCenterCanvas, BP, CP, TP, stackMyShapes);
                         break;
 
-                    case "BookAnalysis":
+                    case "Book":
                         dialogBookAnalysis(widthCenterCanvas, heightCenterCanvas, widthRightCanvas, BP);
                         break;
 
