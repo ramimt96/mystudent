@@ -26,12 +26,12 @@ import java.util.*;
 public class MyCharacterFrequencyApplication extends Application {
     Integer N;              // Number of events [chars] to display
     Integer M;              // Max of events [chars] to display [26]
+    double startAngle;      // Starting angle of the pie chart
 
-    double startAngle;
-    double scale;
-
-    String Title, filename, URL;
-    Scanner input;
+    String Title;           // Book title
+    String filename;        // name of text file containing book or database
+    String URL;             // URL of DBMS driver
+    Scanner input;          // Scanner for file reading
 
     //Inputs to dialog boxes
     Boolean isPiechart;
