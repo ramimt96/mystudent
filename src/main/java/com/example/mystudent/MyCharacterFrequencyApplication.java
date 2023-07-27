@@ -64,8 +64,8 @@ public class MyCharacterFrequencyApplication extends Application {
         HB.setPadding(new Insets(5, 5, 5, 5));
 
         String[] nameImages = new String[] {"Circle", "Rectangle", "Intersection", "Pie"};
-        String pathFile = "C:\\Users\\rtara\\OneDrive\\Documents\\CCNY\\2023 Summer Term\\CSC 221 Software Design\\" +
-                "Assignment 4 - mystudent\\mystudent\\Shapes\\";
+        String pathFile = "C:\\Users\\rtara\\OneDrive\\Documents\\CCNY\\2023 Summer Term\\CSC 221 Software Design" +
+                "\\Assignment 4 - mystudent\\mystudent\\Shapes\\";
 
         Deque<MyShape> stackMyShapes = new ArrayDeque<>();
         for (String nameImage : nameImages) {
@@ -90,9 +90,10 @@ public class MyCharacterFrequencyApplication extends Application {
                         dialogIntersection(widthCenterCanvas, heightCenterCanvas, BP, CP, TP, stackMyShapes);
                         break;
 
-                    case "Book":
+                    case "BookAnalysis":
                         dialogBookAnalysis(widthCenterCanvas, heightCenterCanvas, widthRightCanvas, BP);
                         break;
+
                     case "SQL":
                         dialogSQL(widthCenterCanvas, heightCenterCanvas, widthRightCanvas, BP);
                 }
@@ -412,10 +413,12 @@ public class MyCharacterFrequencyApplication extends Application {
             System.out.println(H);
 
             // Custom dialog for chart selection
-            try{
+            dialogPiechart(widthCenterCanvas, heightCenterCanvas, widthRightCanvas, H, BP);
+
+            /*try{
                 dialogPiechart(widthCenterCanvas, heightCenterCanvas, widthRightCanvas, H, BP);
             }
-            catch(FileNotFoundException e) { throw new RuntimeException(e); }
+            catch(FileNotFoundException e) { throw new RuntimeException(e); }*/
         });
     }
 
@@ -512,10 +515,12 @@ public class MyCharacterFrequencyApplication extends Application {
                     HistogramAlphaBet H = MySQLStudentsDatabase(url, username, password, filename);
 
                     // Custom dialog for chart selection
-                    try{
+                    /*try{
                         dialogPiechart(widthCenterCanvas, heightCenterCanvas, widthRightCanvas, H, BP);
                     }
-                    catch(FileNotFoundException e) { throw new RuntimeException(e); }
+                    catch(FileNotFoundException e) { throw new RuntimeException(e); }*/
+
+                    dialogPiechart(widthCenterCanvas, heightCenterCanvas, widthRightCanvas, H, BP);
                     break;
 
                 case "NY CityBke":
@@ -650,7 +655,7 @@ public class MyCharacterFrequencyApplication extends Application {
         }
     }
 
-    public String readFile() {
+    public String readFile()  {
         String w = "";
 
         try {
@@ -658,9 +663,11 @@ public class MyCharacterFrequencyApplication extends Application {
             while (input.hasNext()) {
                 w += input.nextLine().replaceAll("[^a-zA-Z]", "").toLowerCase();
             }
-        } catch (NoSuchElementException elementException) {
+        }
+        catch (NoSuchElementException elementException) {
             System.err.println("Invalid input! Terminating...");
-        } catch (IllegalStateException stateException) {
+        }
+        catch (IllegalStateException stateException) {
             System.err.println("Error processing file! Terminating...");
         }
         return w;
