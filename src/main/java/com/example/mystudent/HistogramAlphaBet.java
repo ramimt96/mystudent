@@ -49,6 +49,14 @@ public class HistogramAlphaBet {
     public Integer getCumulativeFrequency() {return frequency.values().stream().reduce(0,Integer::sum); }
 
 
+    public Map<Character, Integer> sortAlphabetically() {
+        return frequency
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByKey())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new));
+    }
+
     //Sort the frequency map in increasing order of values
     public Map<Character, Integer> sortUpFrequency() {
         return frequency

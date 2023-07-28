@@ -34,7 +34,7 @@ public class MyDatabaseApplication extends Application {
     Scanner input;          // Scanner for file reading
 
     //Inputs to dialog boxes
-    Boolean isPiechart;
+    boolean isBook, isSQL;
     List<String> piechartInputs = new ArrayList();
     List<String> sqlInputs = new ArrayList<>();
 
@@ -142,7 +142,6 @@ public class MyDatabaseApplication extends Application {
     }
 
     public Canvas addCanvasLegend(double widthCanvas, double heightCanvas, HistogramAlphaBet H){
-
         String information;
 
         Map<Character, Integer> sortedFrequency = H.sortDownFrequency();
@@ -441,7 +440,7 @@ public class MyDatabaseApplication extends Application {
         */
 
         TextField userName = new TextField();
-        TextField passWord = new TextField();
+        PasswordField passWord = new PasswordField();
         ComboBox<String> schema = new ComboBox<>();
         schema.getItems().addAll("Students");
 
@@ -455,7 +454,7 @@ public class MyDatabaseApplication extends Application {
         gridDialog.setPadding(new Insets(20, 150, 10, 10));
 
         gridDialog.add(new Label("DBMS"), 0, 1);
-        //gridDialog.add(radioMSSQL, 1, 1);
+        //gridDialog.add(radioMSSQL, 2, 1);
         gridDialog.add(radioMySQL, 1, 1);
         //gridDialog.add(radioPostgreSQL, 4, 1);
         gridDialog.add(new Label("Schema"), 0, 2);
@@ -605,10 +604,10 @@ public class MyDatabaseApplication extends Application {
 
         gridDialog.add(new Label("Display"), 0, 0);
         gridDialog.add(numberEvents, 1, 0);
-        gridDialog.add(new Label("Number of character slices to display"), 2, 0);
+        gridDialog.add(new Label("Number of events to display"), 2, 0);
         gridDialog.add(new Label("Total"), 0, 1);
         gridDialog.add(totalNumberEvents, 1, 1);
-        gridDialog.add(new Label("Max number of characters"), 2, 1);
+        gridDialog.add(new Label("Max number of events"), 2, 1);
         gridDialog.add(new Label("Starting Angle"), 0, 2);
         gridDialog.add(startingAngle, 1, 2);
         gridDialog.add(new Label("Starting angle of first slice [in degrees]"), 2, 2);
