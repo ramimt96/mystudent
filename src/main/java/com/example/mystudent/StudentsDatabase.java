@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.util.Map;
 import java.util.HashMap;
 
-// Class StudentsDatabase
 public class StudentsDatabase implements TableInterface, StudentsDatabaseInterface{
 
     // Instance variables
@@ -24,10 +23,8 @@ public class StudentsDatabase implements TableInterface, StudentsDatabaseInterfa
         this.connection = getConnection(url, username, password);
     }
 
-    // Abstract method of TableInterface
-    // Return a Connection object to the database
+    // Abstract method of TableInterface returns a Connection object to the database
     public Connection getConnection(String url, String username, String password) {
-
         Connection connection = null;
         try{
             connection = DriverManager.getConnection(url, username, password);
@@ -40,7 +37,6 @@ public class StudentsDatabase implements TableInterface, StudentsDatabaseInterfa
 
     // Nested class Schedule
     class Schedule {
-
         String ddlCreateTable, ddlPopulateTable;
         String ddlUpDateCourseInstructor, ddlUpDateInstructor;
         String filename, nameTable;
@@ -82,7 +78,6 @@ public class StudentsDatabase implements TableInterface, StudentsDatabaseInterfa
 
     // Nested class Courses
     class Courses {
-
         String ddlCreateTable, ddlPopulateTable;
         String nameToTable, nameFromTable;
 
@@ -108,7 +103,6 @@ public class StudentsDatabase implements TableInterface, StudentsDatabaseInterfa
 
     // Nested class Students
     class Students {
-
         String ddlCreateTable, ddlPopulateTable;
         String nameTable;
 
@@ -135,7 +129,6 @@ public class StudentsDatabase implements TableInterface, StudentsDatabaseInterfa
 
     // Nested class Classes
     class Classes {
-
         String ddlCreateTable, ddlPopulateTable;
         String nameTable;
 
@@ -162,7 +155,6 @@ public class StudentsDatabase implements TableInterface, StudentsDatabaseInterfa
 
     // Nested class AggregateGrades
     class AggregateGrades {
-
         String ddlCreateTable, ddlPopulateTable;
         String nameToTable, nameFromTable;
 
@@ -187,15 +179,12 @@ public class StudentsDatabase implements TableInterface, StudentsDatabaseInterfa
 
         // Get the aggregate grades
         public ResultSet getAggregateGrades(Connection connection, String nameTable) throws SQLException{
-
             return TableInterface.getTable(connection, nameTable);
         }
 
         // Get map of aggregate grades
         public Map<Character, Integer> getAggregateGrades(String nameTable) {
-
             Map<Character, Integer> mapAggregateGrades = new HashMap<Character, Integer>();
-
             try {
                 ResultSet RS = TableInterface.getTable(connection, nameTable);
 

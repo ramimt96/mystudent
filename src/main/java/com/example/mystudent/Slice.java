@@ -55,7 +55,7 @@ public class Slice {
         GC.fillArc(x - 0.5 * width, y - 0.5 * height, width, height,
                 startAngle, arcAngle, ArcType.ROUND);
 
-        GC.setStroke(MyColor.WHITE.getJavaFXColor());
+        GC.setStroke(MyColor.BLACK.getJavaFXColor());
         GC.strokeArc(x - 0.5 * width, y - 0.5 * height, width, height,
                 startAngle, arcAngle, ArcType.ROUND);
 

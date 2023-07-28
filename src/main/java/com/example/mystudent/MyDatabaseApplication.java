@@ -23,7 +23,7 @@ import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.*;
 
-public class MyCharacterFrequencyApplication extends Application {
+public class MyDatabaseApplication extends Application {
     Integer N;              // Number of events [chars] to display
     Integer M;              // Max of events [chars] to display [26]
     double startAngle;      // Starting angle of the pie chart
@@ -62,7 +62,7 @@ public class MyCharacterFrequencyApplication extends Application {
         HBox HB = new HBox();
         HB.setPrefWidth(widthTopCanvas);
         HB.setPadding(new Insets(5, 5, 5, 5));
-        HB.setSpacing(10);
+        HB.setSpacing(120);
 
         String[] nameImages = new String[] {"Circle", "Rectangle", "Intersection", "Book", "SQL"};
         String pathFile = "C:\\Users\\rtara\\OneDrive\\Documents\\CCNY\\2023 Summer Term\\CSC 221 Software Design" +
@@ -74,7 +74,7 @@ public class MyCharacterFrequencyApplication extends Application {
             ImageView geometricImage = new ImageView(new Image(new FileInputStream(nameFile), heightTopCanvas,
                     heightTopCanvas, true, false));
             geometricImage.setPreserveRatio(true);
-            geometricImage.setFitHeight(50);
+            geometricImage.setFitHeight(70);
 
             //draw a geometric shape on mouse click; lambda expression
             geometricImage.setOnMouseClicked(e -> {
@@ -430,21 +430,20 @@ public class MyCharacterFrequencyApplication extends Application {
 
         ToggleGroup groupSQL = new ToggleGroup();
 
-        RadioButton radioMSSQL = new RadioButton("MS SQL");
-        radioMSSQL.setToggleGroup(groupSQL);
-
         RadioButton radioMySQL = new RadioButton("MySQL");
         radioMySQL.setToggleGroup(groupSQL);
 
+        /*
+        RadioButton radioMSSQL = new RadioButton("MS SQL");
+        radioMSSQL.setToggleGroup(groupSQL);
         RadioButton radioPostgreSQL = new RadioButton("Postgre SQL");
         radioPostgreSQL.setToggleGroup(groupSQL);
+        */
 
         TextField userName = new TextField();
         TextField passWord = new TextField();
         ComboBox<String> schema = new ComboBox<>();
-        schema.getItems().addAll("Students",
-                "New York CityBike",
-                "Family Relations");
+        schema.getItems().addAll("Students");
 
         // Set the button types
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
@@ -456,9 +455,9 @@ public class MyCharacterFrequencyApplication extends Application {
         gridDialog.setPadding(new Insets(20, 150, 10, 10));
 
         gridDialog.add(new Label("DBMS"), 0, 1);
-        gridDialog.add(radioMSSQL, 1, 1);
-        gridDialog.add(radioMySQL, 2, 1);
-        gridDialog.add(radioPostgreSQL, 4, 1);
+        //gridDialog.add(radioMSSQL, 1, 1);
+        gridDialog.add(radioMySQL, 1, 1);
+        //gridDialog.add(radioPostgreSQL, 4, 1);
         gridDialog.add(new Label("Schema"), 0, 2);
         gridDialog.add(schema, 1, 2);
 
@@ -481,12 +480,14 @@ public class MyCharacterFrequencyApplication extends Application {
                         URL = "jdbc:mysql://localhost:3306/Students?allowLoadLocalInfile=true";
                         break;
 
+                    /*
                     case "MS SQL":
                         URL = "jdbc:sqlserver://localhost\\SQLEXPRESS:52188";
                         break;
 
                     case "Postgre SQL":
                         URL = "jdbc:postgresql://localhost:5432/postgres";
+                    */
                 }
                 System.out.println(URL);
 
@@ -523,11 +524,6 @@ public class MyCharacterFrequencyApplication extends Application {
 
                     dialogPiechart(widthCenterCanvas, heightCenterCanvas, widthRightCanvas, H, BP);
                     break;
-
-                case "NY CityBke":
-                    break;
-
-                case "Family Relations":
             }
         });
     }

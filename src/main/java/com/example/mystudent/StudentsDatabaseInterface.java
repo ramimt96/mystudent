@@ -1,12 +1,9 @@
 package com.example.mystudent;
 
-// Interface StudentsDatabaseInterface
 interface StudentsDatabaseInterface {
 
-    // Constant: Schema name
     String SCHEMA = "Students";
 
-    // Interface CONSTANT Strings specific to Database Students
     String ddlCreateTableSchedule = "CREATE TABLE Schedule(" +
             "courseId CHAR(12) NOT NULL UNIQUE, " +
             "sectionNumber VARCHAR(8) NOT NULL UNIQUE, " +
@@ -41,7 +38,8 @@ interface StudentsDatabaseInterface {
 
     String ddlCreateTableAggregateGrades = "CREATE TABLE AggregateGrades(grade CHAR, numberStudents INT)";
 
-    String ddlInsertTableStudents = "INSERT INTO Students VALUES (9991001, 'Name-1', 'M', NULL), " +
+    String ddlInsertTableStudents = "INSERT INTO Students VALUES " +
+            "(9991001, 'Name-1', 'M', NULL), " +
             "(9991002, 'Name-2', 'F', NULL), " +
             "(9991003, 'Name-3', 'M', NULL), " +
             "(9991004, 'Name-4', 'F', NULL), " +
@@ -86,7 +84,6 @@ interface StudentsDatabaseInterface {
     String sqlAggregateGrades = "SELECT	grade, count(grade) FROM Classes GROUP BY grade";
 
     // Static methods
-
     static String ddlUpDateCourseInstructor(String courseId, String sectionNumber, String nameInstructor){
 
         return  "UPDATE Schedule" +
