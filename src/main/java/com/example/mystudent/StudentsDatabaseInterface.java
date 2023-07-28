@@ -1,7 +1,6 @@
 package com.example.mystudent;
 
 interface StudentsDatabaseInterface {
-
     String SCHEMA = "Students";
 
     String ddlCreateTableSchedule = "CREATE TABLE Schedule(" +

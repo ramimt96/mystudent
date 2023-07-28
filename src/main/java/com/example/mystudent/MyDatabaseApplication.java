@@ -141,10 +141,20 @@ public class MyDatabaseApplication extends Application {
         return CV;
     }
 
-    public Canvas addCanvasLegend(double widthCanvas, double heightCanvas, HistogramAlphaBet H){
+    public Canvas addCanvasLegend(double widthCanvas, double heightCanvas, HistogramAlphaBet H, String hType){
         String information;
 
-        Map<Character, Integer> sortedFrequency = H.sortDownFrequency();
+        Map<Character, Integer> sortedFrequency;
+        if ("Book".equals(hType)) {
+            sortedFrequency = H.sortDownFrequency();
+        } else if ("SQL".equals(hType)) {
+            sortedFrequency = H.sortAlphabetically();
+        } else {
+            sortedFrequency = H.sortDownFrequency();
+        }
+
+
+        // Map<Character, Integer> sortedFrequency = H.sortDownFrequency();
 
         Canvas CV = new Canvas(widthCanvas, heightCanvas);
         GraphicsContext GC = CV.getGraphicsContext2D();
@@ -413,7 +423,7 @@ public class MyDatabaseApplication extends Application {
             System.out.println(H);
 
             // Custom dialog for chart selection
-            dialogPiechart(widthCenterCanvas, heightCenterCanvas, widthRightCanvas, H, BP);
+            dialogPiechart(widthCenterCanvas, heightCenterCanvas, widthRightCanvas, H, BP, "Book");
 
             /*try{
                 dialogPiechart(widthCenterCanvas, heightCenterCanvas, widthRightCanvas, H, BP);
@@ -521,7 +531,7 @@ public class MyDatabaseApplication extends Application {
                     }
                     catch(FileNotFoundException e) { throw new RuntimeException(e); }*/
 
-                    dialogPiechart(widthCenterCanvas, heightCenterCanvas, widthRightCanvas, H, BP);
+                    dialogPiechart(widthCenterCanvas, heightCenterCanvas, widthRightCanvas, H, BP, "SQL");
                     break;
             }
         });
@@ -586,7 +596,7 @@ public class MyDatabaseApplication extends Application {
 
 
     public void dialogPiechart(double widthCenterCanvas, double heightCenterCanvas, double widthRightCanvas,
-                               HistogramAlphaBet H, BorderPane BP) {
+                               HistogramAlphaBet H, BorderPane BP, String hType) {
         Dialog<List<String>> dialog = new Dialog<>();
         dialog.setTitle("Pie Chart");
         dialog.setHeaderText(null);
@@ -638,7 +648,7 @@ public class MyDatabaseApplication extends Application {
             Canvas CV = addCanvasPieChart(widthCenterCanvas, heightCenterCanvas, H);
             BP.setAlignment(CV, Pos. TOP_CENTER); BP.setCenter(CV);
 
-            BP.setRight(addCanvasLegend(widthRightCanvas, heightCenterCanvas, H));
+            BP.setRight(addCanvasLegend(widthRightCanvas, heightCenterCanvas, H, hType));
         });
     }
 
