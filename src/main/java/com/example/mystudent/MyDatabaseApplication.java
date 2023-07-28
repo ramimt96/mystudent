@@ -62,7 +62,7 @@ public class MyDatabaseApplication extends Application {
         HBox HB = new HBox();
         HB.setPrefWidth(widthTopCanvas);
         HB.setPadding(new Insets(5, 5, 5, 5));
-        HB.setSpacing(120);
+        HB.setSpacing(100);
 
         String[] nameImages = new String[] {"Circle", "Rectangle", "Intersection", "Book", "SQL"};
         String pathFile = "C:\\Users\\rtara\\OneDrive\\Documents\\CCNY\\2023 Summer Term\\CSC 221 Software Design" +
@@ -74,7 +74,7 @@ public class MyDatabaseApplication extends Application {
             ImageView geometricImage = new ImageView(new Image(new FileInputStream(nameFile), heightTopCanvas,
                     heightTopCanvas, true, false));
             geometricImage.setPreserveRatio(true);
-            geometricImage.setFitHeight(70);
+            geometricImage.setFitHeight(50);
 
             //draw a geometric shape on mouse click; lambda expression
             geometricImage.setOnMouseClicked(e -> {
@@ -374,7 +374,7 @@ public class MyDatabaseApplication extends Application {
 
     public void dialogBookAnalysis(double widthCenterCanvas, double heightCenterCanvas, double widthRightCanvas, BorderPane BP){
         Dialog<String> dialog = new Dialog<>();
-        dialog.setTitle("Book Analytics");
+        dialog.setTitle("Book Analysis");
         dialog.setHeaderText(null);
 
         // Set the button types
@@ -525,7 +525,6 @@ public class MyDatabaseApplication extends Application {
                             "CSC 221 Software Design\\Assignment 4 - mystudent\\mystudent\\Texts\\Schedule.txt\"";
                     HistogramAlphaBet H = MySQLStudentsDatabase(url, username, password, filename);
 
-                    // Custom dialog for chart selection
                     /*try{
                         dialogPiechart(widthCenterCanvas, heightCenterCanvas, widthRightCanvas, H, BP);
                     }
@@ -586,12 +585,6 @@ public class MyDatabaseApplication extends Application {
 
         // Create-return a histogram
         return new HistogramAlphaBet(AG);
-
-        /*
-        // Alternatively apply the constructor using the ResultSet object
-        ResultSet RS = aggregateGrades.getAggregateGrades(connection, nameToTable);
-        return new HistogramAlphaBet(RS);
-        */
     }
 
 
