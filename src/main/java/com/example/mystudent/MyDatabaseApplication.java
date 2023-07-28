@@ -34,8 +34,7 @@ public class MyDatabaseApplication extends Application {
     Scanner input;          // Scanner for file reading
 
     //Inputs to dialog boxes
-    boolean isBook, isSQL;
-    List<String> piechartInputs = new ArrayList();
+    List<String> piechartInputs = new ArrayList<>();
     List<String> sqlInputs = new ArrayList<>();
 
     public VBox addLeftVBox(double widthLeftCanvas, double heightCanvas, TilePane TP, MyColor color){
@@ -76,27 +75,16 @@ public class MyDatabaseApplication extends Application {
             geometricImage.setPreserveRatio(true);
             geometricImage.setFitHeight(50);
 
-            //draw a geometric shape on mouse click; lambda expression
+            //trigger a dialog on mouse click
             geometricImage.setOnMouseClicked(e -> {
                 switch (nameImage) {
-                    case "Circle":
-                        dialogCircle(widthCenterCanvas, heightCenterCanvas, BP, CP, TP, stackMyShapes);
-                        break;
-
-                    case "Rectangle":
-                        dialogRectangle(widthCenterCanvas, heightCenterCanvas, BP, CP, TP, stackMyShapes);
-                        break;
-
-                    case "Intersection":
-                        dialogIntersection(widthCenterCanvas, heightCenterCanvas, BP, CP, TP, stackMyShapes);
-                        break;
-
-                    case "Book":
-                        dialogBookAnalysis(widthCenterCanvas, heightCenterCanvas, widthRightCanvas, BP);
-                        break;
-
-                    case "SQL":
-                        dialogSQL(widthCenterCanvas, heightCenterCanvas, widthRightCanvas, BP);
+                    case "Circle" -> dialogCircle(widthCenterCanvas, heightCenterCanvas, BP, CP, TP, stackMyShapes);
+                    case "Rectangle" ->
+                            dialogRectangle(widthCenterCanvas, heightCenterCanvas, BP, CP, TP, stackMyShapes);
+                    case "Intersection" ->
+                            dialogIntersection(widthCenterCanvas, heightCenterCanvas, BP, CP, TP, stackMyShapes);
+                    case "Book" -> dialogBookAnalysis(widthCenterCanvas, heightCenterCanvas, widthRightCanvas, BP);
+                    case "SQL" -> dialogSQL(widthCenterCanvas, heightCenterCanvas, widthRightCanvas, BP);
                 }
             });
             HB.getChildren().add(geometricImage);
@@ -230,7 +218,7 @@ public class MyDatabaseApplication extends Application {
         Platform.runLater(() -> xPTLC.requestFocus());
 
         //convert the result to a list when the login button is clicked
-        List<String> geometricImageInputs =  new ArrayList();
+        List<String> geometricImageInputs =  new ArrayList<>();
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == ButtonType.OK) {
                 geometricImageInputs.add(xPTLC.getText());
@@ -386,7 +374,7 @@ public class MyDatabaseApplication extends Application {
         gridDialog.setVgap(10);
         gridDialog.setPadding(new Insets(20, 150, 10, 10));
 
-        ComboBox<String> title = new ComboBox();
+        ComboBox<String> title = new ComboBox<>();
         title.getItems().addAll("Alice in Wonderland", "A Tale of Two Cities", "David Copperfield",
                 "Emma", "Moby Dick", "Oliver Twist", "Pride and Prejudice", "War and Peace", "xWords");
 
